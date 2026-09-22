@@ -1118,6 +1118,26 @@ public static class ItemLoader
 		item.ModItem?.UseAnimation(player);
 	}
 
+	private static HookList HookCanOpen = AddHook<Func<Item, Player, bool>>(g => g.CanOpen);
+
+	/// <summary>
+	/// If ModItem.CanOpen or any of the GlobalItem.CanOpen hooks returns false, this returns false, preventing the item from being opened.
+	/// </summary>
+	public static bool CanOpen(Item item, Player player)
+	{
+		if (item.IsAir)
+			return true;
+		if (item.ModItem != null && !item.ModItem.CanOpen(player))
+			return false;
+
+		foreach (var g in HookCanOpen.Enumerate(item)) {
+			if (!g.CanOpen(item, player))
+				return false;
+		}
+
+		return true;
+	}
+
 	private static HookList HookConsumeItem = AddHook<Func<Item, Player, bool>>(g => g.ConsumeItem);
 
 	/// <summary>

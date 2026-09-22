@@ -983,6 +983,17 @@ public abstract class ModItem : ModType<Item, ModItem>, ILocalizedModType
 	}
 
 	/// <summary>
+	/// Returns whether or not this item, a loot item such as a treasure bag or crate, is allowed to be opened by the given player. Returns true by default.
+	/// <para/> Use this to prevent an item from being opened, for example to require a key item without consuming it. This is checked before <see cref="ItemLoader.RightClickCallHooks(Item, Player)"/> and any loot is granted.
+	/// <para/> Called on the local client only.
+	/// </summary>
+	/// <param name="player">The player.</param>
+	public virtual bool CanOpen(Player player)
+	{
+		return true;
+	}
+
+	/// <summary>
 	/// Allows you to add and modify the loot items that spawn from bag items when opened.
 	/// The <see href="https://github.com/tModLoader/tModLoader/wiki/Basic-NPC-Drops-and-Loot-1.4">Basic NPC Drops and Loot 1.4 Guide</see> explains how to use the <see cref="ModNPC.ModifyNPCLoot(NPCLoot)"/> hook to modify NPC loot as well as this hook. A common usage is to use this hook and <see cref="ModNPC.ModifyNPCLoot(NPCLoot)"/> to edit non-expert exclusive drops for bosses.
 	/// <br/> This hook only runs once during mod loading, any dynamic behavior must be contained in the rules themselves.
